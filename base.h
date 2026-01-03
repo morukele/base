@@ -101,7 +101,6 @@
 /*
 * Helper Macros
 */
-
 #define Stmnt(S) do { S } while (0)
 
 // This allows users to implement their own custom assert break
@@ -158,5 +157,46 @@
 #define MemoryCopyStruct(d,s) MemoryCopy((d), (s), Min(sizeof(*(d)), sizeof(*(s))))
 #define MemoryCopyArray(d,s) MemoryCopy((d), (s), Min(sizeof(s), sizeof(d)))
 #define MemoryCopyTyped(d,s,c) MemoryCopy((d), (s), Min(sizeof(*(d)), sizeof(*(s)))*(c))
+
+/*
+* Basic Types
+*/
+#include <stdint.h>
+typedef int8_t   I8;
+typedef int16_t  I16;
+typedef int32_t  I32;
+typedef int64_t  I64;
+typedef uint8_t  U8;
+typedef uint16_t U16;
+typedef uint32_t U32;
+typedef uint64_t U64;
+typedef float    F32;
+typedef double   F64;
+
+/*
+ * Basic Constants
+ */
+global I8  min_I8  = (I8) 0x80;
+global I16 min_I16 = (I16)0x8000;
+global I32 min_I32 = (I32)0x80000000;
+global I64 min_I64 = (I64)0x8000000000000000llu;
+
+global I8  max_I8  = (I8) 0x7f;
+global I16 max_I16 = (I16)0x7fff;
+global I32 max_I32 = (I32)0x7fffffff;
+global I64 max_I64 = (I64)0x7fffffffffffffffllu;
+
+global U8  min_U8  = 0x80;
+global U16 min_U16 = 0x8000;
+global U32 min_U32 = 0x80000000;
+global U64 min_U64 = 0x8000000000000000llu;
+
+global U8  max_U8  = 0xff;
+global U16 max_U16 = 0xffff;
+global U32 max_U32 = 0xffffffff;
+global U64 max_U64 = 0xffffffffffffffffllu;
+
+global F32 machine_epsilon_F32 = 1.1920929e-7f;
+global F64 machine_epsilon_F64 = 2.220446e-16f;
 
 #endif //BASE_H

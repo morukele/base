@@ -20,3 +20,7 @@ The base consists of:
 - C-style linkage
 - Memory Zero functions
 - Memory Copy functions
+- Basic Types
+- Basic Constants
+- Function wrappers
+- Extended basic types

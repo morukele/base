@@ -1,7 +1,11 @@
 #include "base.h"
 #include <stdio.h>
 
-#define EvalPrint(x) printf("%s = %llu\n", #x, (unsigned long long)(x))
+#define EvalPrint(x) printf("%s = %d\n", #x, (I32)(x))
+#define EvalPrintLL(x) printf("%s = %lld\n", #x, (I64)(x))
+#define EvalPrintU(x) printf("%s = %u\n", #x, (U32)(x))
+#define EvalPrintULL(x) printf("%s = %llu\n", #x, (U64)(x))
+#define EvalPrintF(x) printf("%s = %e\n", #x, (F64)(x))
 
 struct TestStruct {
     int a;
@@ -46,6 +50,23 @@ int main() {
     EvalPrint(Clamp(1, 0, 100));
     EvalPrint(Clamp(1, 500, 100));
 
+    EvalPrint(min_I8);
+    EvalPrint(min_I16);
+    EvalPrint(min_I32);
+    EvalPrintLL(min_I64);
+
+    EvalPrint(max_I8);
+    EvalPrint(max_I16);
+    EvalPrint(max_I32);
+    EvalPrintULL(max_I64);
+
+    EvalPrintU(max_U8);
+    EvalPrintU(max_U16);
+    EvalPrintU(max_U32);
+    EvalPrintULL(max_U64);
+
+    EvalPrintF(machine_epsilon_F32);
+    EvalPrintF(machine_epsilon_F64);
 
     return 0;
 }

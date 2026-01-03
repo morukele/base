@@ -1,7 +1,9 @@
 #ifndef BASE_H
 #define BASE_H
 
-// NOTE: Context cracking
+/*
+ * Context cracking
+ */
 #if defined(_MSC_VER)
 # define COMPILER_CL 1
 # if defined(_WIN32)
@@ -61,7 +63,9 @@
 # error no context cracking for this compiler
 #endif
 
-// NOTE: Zero fill missing context macros
+/*
+* Zero fill missing context macros
+*/
 #if !defined(COMPILER_CL)
 # define COMPILER_CL 0
 #endif
@@ -89,5 +93,70 @@
 #if !defined(ARCH_ARM64)
 # define ARCH_ARM64 0
 #endif
+
+#if !defined(ENABLE_ASSERT)
+# define ENABLE_ASSERT 0
+#endif
+
+/*
+* Helper Macros
+*/
+
+#define Stmnt(S) do { S } while (0)
+
+// This allows users to implement their own custom assert break
+// instead of default crash behaviour.
+#if !defined(AssertBreak)
+# define AssertBreak() __builtin_trap()
+#endif
+
+#if ENABLE_ASSERT
+# define Assert(c) Stmnt( if (!(c)){ AssertBreak(); } )
+#else
+# define Assert(c)
+#endif
+
+#define Stringify_(S) #S
+#define Stringify(S) Stringify_(S)
+#define Glue_(A,B) A##B
+#define Glue(A,B) Glue_(A,B)
+
+#define ArrayCount(a) (sizeof(a)/sizeof(*(a)))
+
+#define IntFromPtr(p) (unsigned long long)((char*)p - (char*)0)
+#define PtrFromInt(n) (void*)((char*)0 + (n))
+
+
+#define Member(T,m) (((T*)0)->m)
+#define OffsetOfMember(T,m) IntFromPtr(&Member(T,m))
+
+#define Min(a,b) (((a) < (b)) ? (a) : (b))
+#define Max(a,b) (((a) > (b)) ? (a) : (b))
+#define Clamp(a,x,b) (((x) < (a)) ? (a) : ((b) < (x)) ? (b) : (x))
+
+#define ClampTop(a,b) Min(a,b)
+#define ClampBot(a,b) Max(a,b)
+
+#define global static
+#define local static
+#define function static
+
+// Working with C style linkage
+#define c_linkage_begin extern "C"{
+#define c_linkage_end }
+#define c_linkage extern "C"
+
+#include <string.h>
+#define MemoryZero(p,z) memset((p), 0, (z))
+#define MemoryZeroStruct(p) MemoryZero((p), sizeof(*(p)))
+#define MemoryZeroArray(p) MemoryZero((p), sizeof(p))
+#define MemoryZeroTyped(p,c) MemoryZero((p), sizeof(*(p))*(c))
+
+#define MemoryMatch(a,b,z) (memcmp((a), (b), (z))) == 0
+
+#define MemoryCopy(d,s,z) memmove((d), (s), (z))
+#define MemoryCopyStruct(d,s) MemoryCopy((d), (s), Min(sizeof(*(d)), sizeof(*(s))))
+#define MemoryCopyArray(d,s) MemoryCopy((d), (s), Min(sizeof(s), sizeof(d)))
+#define MemoryCopyTyped(d,s,c) MemoryCopy((d), (s), Min(sizeof(*(d)), sizeof(*(s)))*(c))
 
 #endif //BASE_H

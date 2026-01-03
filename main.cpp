@@ -14,6 +14,5 @@ int main() {
     printf("amd     = %d\n", ARCH_AMD64);
     printf("arm64   = %d\n", ARCH_ARM64);
 
-
     return 0;
 }

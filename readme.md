@@ -24,3 +24,4 @@ The base consists of:
 - Basic Constants
 - Function wrappers
 - Extended basic types
+- Memory Arena

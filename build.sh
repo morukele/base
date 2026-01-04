@@ -3,6 +3,6 @@
 # Set compiler options
 opts="-DENABLE_ASSERT=1"
 
-clang++ $opts main.cpp -o ./build/main
+clang++ $opts main.cpp arena.cpp -o ./build/main
 
 ./build/main

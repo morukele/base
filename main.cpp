@@ -1,4 +1,5 @@
 #include "base.h"
+#include "arena.h"
 #include <stdio.h>
 
 #define EvalPrint(x) printf("%s = %d\n", #x, (I32)(x))
@@ -15,58 +16,23 @@ struct TestStruct {
 };
 
 int main() {
-    int foo[100];
-    for (int i = 0; i < ArrayCount(foo); i += 1) {
-        foo[i] = i;
-    }
+    Arena arena = {};
+    ArenaInit(&arena, KB(10));
 
-    EvalPrint(ArrayCount(foo));
+    int* a = (int*)ArenaAlloc(&arena, 1, sizeof(int), _Alignof(int));
+    char* b = (char*)ArenaAlloc(&arena, 100, sizeof(char), _Alignof(char));
 
-    int bar[100];
-    MemoryCopyArray(bar, foo);
-    EvalPrint(bar[50]);
-    EvalPrint(MemoryMatch(foo, bar, sizeof(foo)));
-    MemoryZeroArray(bar);
-    EvalPrint(bar[50]);
-    EvalPrint(MemoryMatch(foo, bar, sizeof(foo)));
+    *a = 20;
+    strcpy(b, "a string.");
 
-    EvalPrint(OffsetOfMember(TestStruct, a));
-    EvalPrint(OffsetOfMember(TestStruct, b));
-    EvalPrint(OffsetOfMember(TestStruct, c));
-    EvalPrint(OffsetOfMember(TestStruct, d));
+    printf("%d\n", *a);
+    printf("%s\n", b);
 
-    TestStruct t = {1, 2, 3, 4};
-    EvalPrint(t.a);
-    EvalPrint(t.d);
-    MemoryZeroStruct(&t);
-    EvalPrint(t.a);
-    EvalPrint(t.d);
+    ArenaDelete(&arena);
 
-    EvalPrint(Min(1, 10));
-    EvalPrint(Min(100, 10));
-    EvalPrint(Max(1, 10));
-    EvalPrint(Min(100, 10));
-    EvalPrint(Clamp(1, 10, 100));
-    EvalPrint(Clamp(1, 0, 100));
-    EvalPrint(Clamp(1, 500, 100));
-
-    EvalPrint(min_I8);
-    EvalPrint(min_I16);
-    EvalPrint(min_I32);
-    EvalPrintLL(min_I64);
-
-    EvalPrint(max_I8);
-    EvalPrint(max_I16);
-    EvalPrint(max_I32);
-    EvalPrintULL(max_I64);
-
-    EvalPrintU(max_U8);
-    EvalPrintU(max_U16);
-    EvalPrintU(max_U32);
-    EvalPrintULL(max_U64);
-
-    EvalPrintF(machine_epsilon_F32);
-    EvalPrintF(machine_epsilon_F64);
+    // Should produce rubbish value
+    printf("%d\n", *a);
+    printf("%s\n", b);
 
     return 0;
 }
